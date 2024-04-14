@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  margin: 0 auto;
+  max-width: 100%;
+  padding: 0 20px;
+  /* background-color: #b9cabb; */
+
+}
+
+h3 {
+  margin-top: 0;
+  color: #e42727;
+}
+ 
+.container {
+  border: 2px solid #dedede;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px 0;
+}
+.ParentSection {
+  display: flex;
+  height: 410px;
+}
+.darker {
+  border-color: #ccc;
+  background-color: #ddd;
+}
+ 
+.container::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+ 
+.container span {
+  float: left;
+  max-width: 60px;
+  width: 100%;
+  margin-right: 20px;
+  border-radius: 50%;
+}
+ 
+.container span.right {
+  float: right;
+  margin-left: 20px;
+  margin-right:0;
+}
+ 
+.time-right {
+  float: right !important;
+  color: #aaa;
+}
+ 
+.time-left {
+  float: left !important;
+  color: #999;
+}
+ 
+div.chatScroll {
+  background-color: #6f6f6f;
+  height: 400px;
+  width: 100%;
+  overflow-y: scroll;
+  margin-bottom: 20px;
+}
+
+.chatSection {
+width: 70%;
+/* background: #ebf5c7; */
+
+}
+.FAQsSection {
+    width: 30%;
+    padding: 0 30px;
+    height: 100%;
+    overflow-y: scroll;
+    /* background: #ebf5c7; */
+}
+
+#inputText {
+  float: right;
+  margin-right: 5px;
+  width: 60%;
+}
+#btnSubmit {
+  float: right;
+  margin-right: 5px;
+}
+#btnReset {
+  float: right;
+}
+
+#btnSummary {
+  display: block;
+  margin-top: 10px;
+  width: 11%;
+}
+
+#myFile {
+  width: 22%;
+}
+
+.radioDiv {
+  margin-bottom: 15px;
+}
+
+
+.loaderDiv {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+
+.loader {
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid #3498db;
+    width: 120px;
+    height: 120px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+    margin-top: calc(25% - 120px);
+    margin-left: calc(50% - 120px);
+    
+}
+/* Safari */
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+h2 {
+  text-align: center;
+  font-size: 25px;
+  background-color: #1c128a;
+  /* background-color: #f1f1f1; */
+  color: white;
+  padding: 8px;
+};
+
+</style>
+</head>
+<body>
+  <div class="loaderDiv">
+    <div class="loader"></div>
+  </div>
+<h2>Document Data Extraction Via GenAI</h2>
+ <div class="w-100 ParentSection">
+  <!-- <div class="loader"></div> -->
+
+<div class="chatSection">
+<div class="chatScroll">
+
+
+</div>
+ 
+<div>
+  <form class = "frmChat" method="post" enctype="multipart/form-data">
+    <input type="file" id="myFile" name="filename">
+    <input type="button" id="btnReset" value="Reset" onclick="ResetChat()">
+    <input type="button" id="btnSubmit" value="Submit" onclick="SubmitChat('')">
+    <input type="text" id="inputText" name="inputText" placeholder="Enter your query">
+    <input type="button" id="btnSummary" value="Summary" onclick="FileSummary()">
+  </form>
+     
+     <!--<input type="file" id="myFile" name="filename">
+     <input type="text" id="inputText" name="inputText">
+     <input type="button" id="btnSubmit" value="Submit" onclick="SubmitChat()">
+     <input type="button" id="btnReset" value="Reset" onclick="ResetChat()"> -->
+</div>
+</div>
+<div class="FAQsSection">
+  <h3>Frequently Asked Questions</h3>
+  <div class="form-check px-0">
+    <div class="radioDiv">
+        <input class="form-check-input" type="radio" name="frequentlyAskedQuestions"
+            id="frequentlyAskedQuestionsNo1" value="Does the contract clearly define the scope of services to be provided by the vendor?" onclick="FAQSelect(id)">
+        <label class="form-check-label" for="frequentlyAskedQuestionsNo1">
+          Does the contract clearly define the scope of services to be provided by the vendor?
+        </label>
+    </div>
+    <div class="radioDiv">
+        <input class="form-check-input" type="radio" name="frequentlyAskedQuestions"
+            id="frequentlyAskedQuestionsYes2" value="Are there any ambiguities or gaps in the description of services?" onclick="FAQSelect(id)">
+        <label class="form-check-label" for="frequentlyAskedQuestionsYes2">
+          Are there any ambiguities or gaps in the description of services?
+        </label>
+    </div>
+    <div class="radioDiv">
+      <input class="form-check-input" type="radio" name="frequentlyAskedQuestions"
+          id="frequentlyAskedQuestionsYes3" value="Are payment terms well-defined, including rates, invoicing schedules, and any penalties for late payments?" onclick="FAQSelect(id)">
+      <label class="form-check-label" for="frequentlyAskedQuestionsYes3">
+        Are payment terms well-defined, including rates, invoicing schedules, and any penalties for late payments?
+      </label>
+  </div>
+  <div class="radioDiv">
+    <input class="form-check-input" type="radio" name="frequentlyAskedQuestions"
+        id="frequentlyAskedQuestionsYes4" value="Does the contract include provisions related to confidentiality and data protection?" onclick="FAQSelect(id)">
+    <label class="form-check-label" for="frequentlyAskedQuestionsYes4">
+      Does the contract include provisions related to confidentiality and data protection?
+    </label>
+  </div>
+  <div class="radioDiv">
+    <input class="form-check-input" type="radio" name="frequentlyAskedQuestions"
+        id="frequentlyAskedQuestionsYes5" value="Are there clear guidelines on handling sensitive information?" onclick="FAQSelect(id)">
+    <label class="form-check-label" for="frequentlyAskedQuestionsYes5">
+      Are there clear guidelines on handling sensitive information?
+    </label>
+  </div>
+  <div class="radioDiv">
+    <input class="form-check-input" type="radio" name="frequentlyAskedQuestions"
+        id="frequentlyAskedQuestionsYes6" value="How are disputes resolved? Is there a provision for mediation, arbitration, or litigation?" onclick="FAQSelect(id)">
+    <label class="form-check-label" for="frequentlyAskedQuestionsYes6">
+      How are disputes resolved? Is there a provision for mediation, arbitration, or litigation?
+    </label>
+  </div>
+  <div class="radioDiv">
+    <input class="form-check-input" type="radio" name="frequentlyAskedQuestions"
+        id="frequentlyAskedQuestionsYes7" value="Are there any limitations on liability or indemnification clauses?" onclick="FAQSelect(id)">
+    <label class="form-check-label" for="frequentlyAskedQuestionsYes7">
+      Are there any limitations on liability or indemnification clauses?
+    </label>
+  </div>
+  <div class="radioDiv">
+    <input class="form-check-input" type="radio" name="frequentlyAskedQuestions"
+        id="frequentlyAskedQuestionsYes8" value="Does the contract require the vendor to maintain specific insurance coverage?" onclick="FAQSelect(id)">
+    <label class="form-check-label" for="frequentlyAskedQuestionsYes8">
+      Does the contract require the vendor to maintain specific insurance coverage?
+    </label>
+  </div>
+  <div class="radioDiv">
+    <input class="form-check-input" type="radio" name="frequentlyAskedQuestions"
+        id="frequentlyAskedQuestionsYes9" value="Are there provisions related to risk allocation and liability?" onclick="FAQSelect(id)">
+    <label class="form-check-label" for="frequentlyAskedQuestionsYes9">
+      Are there provisions related to risk allocation and liability?
+    </label>
+  </div>
+  <div class="radioDiv">
+    <input class="form-check-input" type="radio" name="frequentlyAskedQuestions"
+        id="frequentlyAskedQuestionsYes10" value="Is there a provision for adjusting fees based on changes in scope or additional work?" onclick="FAQSelect(id)">
+    <label class="form-check-label" for="frequentlyAskedQuestionsYes10">
+      Is there a provision for adjusting fees based on changes in scope or additional work?
+    </label>
+  </div>
+</div>
+
+</div>
+</div>
+</body>
+ 
+<script src="static\js\jquery-3.4.1.js"></script>
+<script>
+    // TO CHANGE EMOJI https:/  /www.w3schools.com/charsets/ref_emoji_body.asp
+   
+    const now = new Date();
+    var requestresponsecount = 0;
+ 
+    function SubmitChat(queryStr){
+        debugger;
+        var query = "";
+        if(queryStr != "") {
+          query = queryStr;
+        } else {
+          query = $("#inputText").val();
+        }
+        var pdffile = new FormData()
+        pdffile.append("file",$('#myFile')[0].files[0]);
+        pdffile.append("query",query);
+        if(query == "" || query == " "){
+            alert("Input Required");
+            return 0;
+        }
+        var request = {'query': query};
+        console.log(pdffile);
+        $(".loaderDiv").css("display", "block");
+        $.ajax({
+            url: '/process_data',
+            type: 'POST',
+            data: pdffile,
+            // dataType: 'json',
+            processData:false,
+            contentType:false,
+            error: function(jqXHR, textStatus, errorMessage) {
+              console.log(errorMessage); 
+              $(".loaderDiv").css("display", "none");// Optional   
+            },  
+             // success: function(data) {console.log(data)} },
+            complete: function(response, textStatus) {
+              $(".loaderDiv").css("display", "none");// Optional   
+                // console.log(response.status);        
+                console.log(response);
+                response = JSON.parse(response.responseText);
+                response = response[0][query]
+                // Add Response in HTML
+                $('.chatScroll').append("<div class=\"container darker response\"><p id=\"response_text_"+requestresponsecount+"\"></p></div>");
+                $("#response_text_"+requestresponsecount).html("<strong>Answer :</strong> "+response);
+        
+                // To Scroll to bottom of the div
+                $('.chatScroll').scrollTop($('.chatScroll')[0].scrollHeight);
+        }
+    });
+        requestresponsecount = requestresponsecount +1;
+ 
+        // Clear the Input text in HTML
+        $("#inputText").val("")
+ 
+        // Add Request in HTML
+        $('.chatScroll').append("<div class=\"container request\"><p id=\"request_text_"+requestresponsecount+"\"></p></div>");
+        $("#request_text_"+requestresponsecount).html("<strong>Query :</strong> "+query);
+
+       
+    }
+    function FileSummary(){
+        debugger;
+        var pdffile = new FormData()
+        pdffile.append("file",$('#myFile')[0].files[0]);
+        console.log(pdffile);
+        $(".loaderDiv").css("display", "block");
+        $.ajax({
+            url: '/summary',
+            type: 'POST',
+            data: pdffile,
+            processData:false,
+            contentType:false,
+            error: function(jqXHR, textStatus, errorMessage) {
+              console.log(errorMessage); 
+              $(".loaderDiv").css("display", "none");// Optional   
+            },  
+             // success: function(data) {console.log(data)} },
+            complete: function(response, textStatus) {
+              $(".loaderDiv").css("display", "none");// Optional   
+                // console.log(response.status);        
+                console.log(response);
+                response = JSON.parse(response.responseText);
+                response = response["output_text"]
+                // Add Response in HTML
+                $('.chatScroll').append("<div class=\"container darker response\"><p id=\"response_text_"+requestresponsecount+"\"></p></div>");
+                $("#response_text_"+requestresponsecount).html("<strong>Summary :</strong> "+response);
+        
+                // To Scroll to bottom of the div
+                $('.chatScroll').scrollTop($('.chatScroll')[0].scrollHeight);
+        }
+    });
+
+        requestresponsecount = requestresponsecount +1;
+ 
+        // Clear the Input text in HTML
+        $("#inputText").val("")
+        
+    }
+   
+    function ResetChat(){
+        // Clear the Input text in HTML
+        $("#inputText").val("")
+ 
+        // Clear the Uploaded File in HTML
+        $("#myFile").val("")
+ 
+        // Clear div
+        $(".chatScroll").empty();
+ 
+        // Reset the count
+        requestresponsecount = 0;
+    }
+    function FAQSelect(FAQID) {
+      console.log("frequentlyAskedQuestions on click" + $("#" + FAQID).val());
+      var queryStr = $("#" + FAQID).val();
+      SubmitChat(queryStr);
+    }
+</script>
+</html>
+ 
+ 
+ 
